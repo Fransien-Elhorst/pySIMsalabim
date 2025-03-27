@@ -569,7 +569,7 @@ def get_tolDens(zimt_device_parameters, session_path, f_min, f_max, V_0, G_frac,
             # tolDens cannot be smaller than 1E-12
             tolDens = max(tolDens, 1e-12)
         else:
-            return result.returncode, message, None
+            return result, message, None
         
         # Remove the tVG and tJ files as they are not needed anymore
         os.remove(os.path.join(session_path,tVG_name))
@@ -701,7 +701,7 @@ def run_impedance_simu(zimt_device_parameters, session_path, f_min, f_max, f_ste
                 V_0 = data['Vext'][0]
             else:
                 message = "Computing the value of Voc led to the following error: " + message
-                return result.returncode, message
+                return result, message
     else:
         V_0 = float(V_0)
 
@@ -944,7 +944,7 @@ if __name__ == "__main__":
 
     # Make the impedance plots
     calc_Voc_output_string = 'Computing the value of Voc led to the following error:'
-    if result == 0:
+    if result.returncode == 0:
         plot_impedance(session_path, os.path.basename(output_name))
     elif result.returncode == 95 and calc_Voc_output_string not in message:
 	plot_impedance(session_path, os.path.basename(output_name))
